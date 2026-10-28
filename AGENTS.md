@@ -18,7 +18,7 @@ Read `README.md`, `ROADMAP.md`, `docs/DEFINITIONS.md`, `docs/REFERENCES.md`, and
 
 1. Reuse mathlib structures and prove compatibility rather than introducing competing foundations without a written reason.
 2. A central extension of abstract groups is not yet a topological or Lie-group cover. Keep the exact sequence, topology, local triviality, smoothness, and non-splitting separate. Prove each promised property.
-3. A non-split double cover is not automatically nonlinear. Nonlinearity concerns faithful finite-dimensional continuous representations. RT05 Definition 6.3 has an additional representation-theoretic condition; preserve its exact scope. Distinguish it from AT12 admissibility.
+3. A non-split double cover is not automatically nonlinear. Nonlinearity concerns faithful finite-dimensional continuous representations. RT05 Definition 6.3 imposes a specific rank-one root condition and calls such a cover genuine; preserve its exact scope and Convention 5.2. Distinguish this from a genuine representation and from AT12 admissibility.
 4. Do not assume covered Cartan subgroups are abelian. Use irreducible representations of a Cartan, and genuine central characters where the required classification theorem has been proved.
 5. `Representation` alone is algebraic. Continuous representations require joint continuity of the action; smooth vectors, differentiated actions, and Harish–Chandra compatibility are additional constructions.
 6. A Harish–Chandra module must contain actual group and Lie-algebra actions, their compatibility including differentiation on the compact subgroup, local finiteness, and the stated finiteness conditions. A finite label or a vector in a free module is not a Harish–Chandra module.
