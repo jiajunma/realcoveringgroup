@@ -15,16 +15,41 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      LEAN_NUM_THREADS: 2
     steps:
-      - uses: actions/checkout@v4
-      - uses: leanprover/lean-action@v1
-        with:
-          build: "true"
-          test: "false"
-          lint: "false"
-          use-mathlib-cache: "true"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install the pinned official Lean release
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(tr -d '\r\n' < lean-toolchain)" = "leanprover/lean4:v4.24.0"
+          archive="$RUNNER_TEMP/lean-4.24.0-linux.tar.zst"
+          curl --fail --location --retry 4 --retry-all-errors \
+            --connect-timeout 30 --max-time 600 \
+            https://github.com/leanprover/lean4/releases/download/v4.24.0/lean-4.24.0-linux.tar.zst \
+            --output "$archive"
+          echo "b14f5e5159219dd1a1956c3b806813319f5e94ccd5bdfd56f54520609a5bb5ec  $archive" | sha256sum --check
+          tar --zstd -xf "$archive" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/lean-4.24.0-linux/bin" >> "$GITHUB_PATH"
+      - name: Report toolchain
+        run: |
+          lean --version
+          lake --version
+      - name: Fetch pinned mathlib cache
+        run: lake exe cache get
+      - name: Build project
+        run: lake build
       - name: Proof dependency report
-        run: lake env lean Tests/Smoke.lean
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake env lean Tests/Smoke.lean | tee "$RUNNER_TEMP/realcoveringgroup-axioms.log"
+          if grep -E 'sorryAx|Lean.ofReduceBool' "$RUNNER_TEMP/realcoveringgroup-axioms.log"; then
+            echo 'Unexpected proof dependency in audited declarations.'
+            exit 1
+          fi
       - name: Check project sources for proof placeholders
         run: |
           if grep -RInE '\b(sorry|admit|axiom|native_decide)\b' RealCoveringGroup --include='*.lean'; then
