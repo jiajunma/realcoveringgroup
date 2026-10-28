@@ -1,0 +1,33 @@
+name: Lean
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          build: "true"
+          test: "false"
+          lint: "false"
+          use-mathlib-cache: "true"
+      - name: Proof dependency report
+        run: lake env lean Tests/Smoke.lean
+      - name: Check project sources for proof placeholders
+        run: |
+          if grep -RInE '\b(sorry|admit|axiom|native_decide)\b' RealCoveringGroup --include='*.lean'; then
+            echo 'Forbidden proof placeholder or trust-extending declaration in project sources.'
+            exit 1
+          fi
