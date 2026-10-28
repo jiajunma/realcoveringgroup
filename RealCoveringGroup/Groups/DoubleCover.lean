@@ -60,6 +60,7 @@ theorem same_fibre_iff (x y : E) :
 /-- The algebraic deck involution. -/
 theorem deck_involutive : Function.Involutive (fun x : E => C.z * x) := by
   intro x
+  change C.z * (C.z * x) = x
   rw [← mul_assoc, C.z_mul_z, one_mul]
 
 /-- The two points in a fibre are distinct. -/
