@@ -38,7 +38,9 @@ Tests/
   Smoke.lean             # 类型与 proof-dependency 检查
 ```
 
-完整拓扑覆盖实例、Harish–Chandra 模、标准模和 KLV 尚未完成。当前代码的编译情况和所有升级后的状态只在 STATUS 中按实际证据报告。
+上述代码已在提交 `5e7870570685747da884877e4925e87152119870` 通过 [Lean CI](https://github.com/jiajunma/realcoveringgroup/actions/runs/40639556428)，包括 `lake build`、smoke checks 和占位证明扫描。五个初始定理的实际公理依赖已记入 STATUS。
+
+完整拓扑覆盖实例、Harish–Chandra 模、标准模和 KLV 尚未完成。
 
 ## 构建
 
@@ -52,12 +54,12 @@ lake build
 lake env lean Tests/Smoke.lean
 ```
 
-通常不需要 `lake update`；改变依赖时才显式更新并审查 lockfile。CI 执行同一构建及 proof-dependency 输出。工作流被触发不等于已通过。
+通常不需要 `lake update`；改变依赖时才显式更新并审查 lockfile。CI 通过校验过的官方 Lean 发布包运行相同构建和检查。工作流被触发不等于已通过；每次升级的状态以具体提交的成功记录为准。
 
 ## 里程碑
 
 - [x] 仓库规则、总路线图、定义登记表、参考文献地图。
-- [ ] M0：初始 Lean 工程及 smoke checks 验证完成（以 STATUS / CI 为准）。
+- [x] M0：初始 Lean 工程及 smoke checks 验证完成（记录见 STATUS）。
 - [ ] M1：实际非平凡 Lie 群覆盖及其结构。
 - [ ] M2：实际表示和 Harish–Chandra 模范畴。
 - [ ] M3：标准模、Langlands 分类与 K0 基。
